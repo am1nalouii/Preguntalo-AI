@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pregúntalo AI</title>
+  <style>
+    /* Reset básico */
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{height:100%;scroll-behavior:smooth}
+    body{
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;
+      color:#fff; background:#000; overflow-x:hidden; position:relative;
+      line-height:1.6;
+    }
+    canvas{position:fixed; inset:0; width:100%; height:100%; z-index:-1; display:block}
+
+    /* Navbar / Header */
+    header{
+      position:fixed; top:0; left:0; right:0; z-index:10;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:16px 28px; background:rgba(0,0,0,.55); backdrop-filter:blur(8px);
+      border-bottom:1px solid rgba(255,255,255,.06)
+    }
+    .brand{font-weight:700; letter-spacing:.5px; font-size:1.05rem}
+    nav ul{display:flex; gap:20px; list-style:none}
+    nav a{color:#fff; text-decoration:none; padding:8px 14px; border-radius:999px; border:1px solid rgba(255,255,255,.12); transition:.25s}
+    nav a:hover{background:#fff; color:#000}
+
+    /* Hero */
+    .hero{min-height:100vh; display:grid; place-items:center; padding:0 24px}
+    .hero-wrap{text-align:center; max-width:900px; margin-top:64px}
+    .hero h1{font-size:clamp(2rem,5vw,3.2rem); line-height:1.15; margin-bottom:16px; font-weight:800}
+    .hero .tagline{font-size:1.2rem; opacity:.85; margin-bottom:28px}
+    .hero-actions{display:flex; gap:16px; justify-content:center; flex-wrap:wrap;}
+    .btn-primary{background:#fff; color:#000; border:0; border-radius:12px; padding:12px 22px; font-weight:700; cursor:pointer; transition:.25s}
+    .btn-primary:hover{transform:translateY(-1px); box-shadow:0 10px 30px rgba(255,255,255,.12)}
+    .btn-secondary{color:#fff; border:1px solid rgba(255,255,255,.5); background:transparent; padding:12px 22px; border-radius:12px; font-weight:700; transition:.25s}
+    .btn-secondary:hover{background:#fff;color:#000}
+
+    /* Secciones */
+    section{padding:96px 24px}
+    .container{max-width:1100px; margin:0 auto}
+    section h2{text-align:center; font-size:clamp(1.6rem,3.5vw,2.4rem); margin-bottom:18px}
+    section .sub{opacity:.8; text-align:center; max-width:820px; margin:0 auto 42px}
+    .split{display:flex; flex-wrap:wrap; gap:32px; justify-content:center; align-items:flex-start}
+    .split > div, .split ul{flex:1 1 320px}
+    ul.highlights{list-style:none; padding-left:0}
+    ul.highlights li{margin-bottom:12px; font-weight:600; font-size:1.05rem; display:flex; align-items:center; gap:8px}
+
+    /* Cards con iconos */
+    .card-icon{display:flex; align-items:flex-start; gap:12px}
+    .card-icon span.icon{font-size:1.5rem; display:inline-block; width:32px; text-align:center; color:#fff}
+    .grid{display:grid; gap:22px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+    .card{
+      background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1);
+      border-radius:16px; padding:22px; transition:.25s; backdrop-filter:blur(6px)
+    }
+    .card:hover{transform:translateY(-4px); box-shadow:0 12px 28px rgba(0,0,0,.45)}
+    .card h3{font-size:1.1rem; margin-bottom:8px}
+
+    /* CTA */
+    .cta{text-align:center}
+    .cta .btn-primary{font-size:1.05rem; padding:14px 24px}
+
+    /* Footer */
+    footer{padding:48px 24px; text-align:center; background:rgba(0,0,0,.5); border-top:1px solid rgba(255,255,255,.06)}
+    footer p{opacity:.8; font-size:.95rem}
+
+    /* Spacer */
+    .spacer{height:72px}
+  </style>
+</head>
+<body>
+  <!-- Fondos -->
+  <canvas id="spaceCanvas"></canvas>
+  <canvas id="waveCanvas"></canvas>
+  <canvas id="overlayCanvas"></canvas>
+  <canvas id="auroraCanvas"></canvas>
+
+  <!-- Header -->
+  <header>
+    <div class="brand">Pregúntalo AI</div>
+    <nav>
+      <ul>
+        <li><a href="#que-es">Qué es</a></li>
+        <li><a href="#caracteristicas">Características</a></li>
+        <li><a href="#cta">Comenzar</a></li>
+      </ul>
+    </nav>
+  </header>
+  <div class="spacer" aria-hidden="true"></div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-wrap">
+      <h1>El asistente que trabaja por ti</h1>
+      <p class="tagline">Agenda, soporte y reservas en un solo lugar. 24/7. Sin esfuerzo.</p>
+      <div class="hero-actions">
+        <button class="btn-primary">Solicitar demostración</button>
+        <a href="#que-es" class="btn-secondary">Ver cómo funciona</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Qué es -->
+  <section id="que-es">
+    <div class="container">
+      <h2>¿Qué es Pregúntalo AI?</h2>
+      <p class="sub">Una plataforma profesional de automatización que organiza tu negocio y mejora la experiencia de tus clientes.</p>
+      <div class="grid">
+        <div class="card card-icon">
+          <span class="icon">📅</span>
+          <div>
+            <h3>Gestión de agenda</h3>
+            <p>Configuración de horarios, disponibilidad y confirmaciones automáticas.</p>
+          </div>
+        </div>
+        <div class="card card-icon">
+          <span class="icon">⚡</span>
+          <div>
+            <h3>Respuestas inmediatas</h3>
+            <p>FAQ inteligente entrenado para tu negocio, con respuestas en segundos.</p>
+          </div>
+        </div>
+        <div class="card card-icon">
+          <span class="icon">📊</span>
+          <div>
+            <h3>Analítica y métricas</h3>
+            <p>Reportes de interacciones, conversiones y rendimiento para decisiones informadas.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Características -->
+  <section id="caracteristicas">
+    <div class="container">
+      <h2>Características principales</h2>
+      <p class="sub">No es solo un chatbot: es tu asistente digital que entiende y ayuda a tu negocio.</p>
+      <div class="grid">
+        <div class="card"><h3>Automatización completa</h3><p>Desde la primera consulta hasta la confirmación de la cita.</p></div>
+        <div class="card"><h3>Integraciones fáciles</h3><p>Conecta con calendarios, CRM y herramientas que ya usas.</p></div>
+        <div class="card"><h3>Seguridad garantizada</h3><p>Procesamiento confidencial y cumplimiento de buenas prácticas.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="cta" class="cta">
+    <div class="container">
+      <h2>Empieza hoy a ahorrar tiempo</h2>
+      <p class="sub">Moderniza tu atención al cliente y libera a tu equipo de tareas repetitivas.</p>
+      <button class="btn-primary">Comenzar ahora</button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Pregúntalo AI — Todos los derechos reservados</p>
+  </footer>
+
+  <!-- JS Fondo completo -->
+  <script>
+    const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+
+    // SPACE
+    const space = document.getElementById('spaceCanvas');
+    const sctx  = space.getContext('2d', { alpha: true });
+    function sizeSpace(){ space.width = innerWidth; space.height = innerHeight; }
+    addEventListener('resize', sizeSpace); sizeSpace();
+    const STAR_COUNT = 320, DUST_COUNT = 160, NEBULA_COUNT = 12;
+    const stars=[], dust=[], nebulas=[];
+    for(let i=0;i<STAR_COUNT;i++) stars.push({x:Math.random()*space.width,y:Math.random()*space.height,r:Math.random()*1.4+0.4,a:Math.random()*0.5+0.15,tw:(Math.random()*0.002)+0.0006,driftX:(Math.random()-0.5)*0.02,driftY:(Math.random()-0.5)*0.02});
+    for(let i=0;i<DUST_COUNT;i++) dust.push({x:Math.random()*space.width,y:Math.random()*space.height,r:Math.random()*0.9+0.3,a:Math.random()*0.15+0.05,vx:(Math.random()-0.5)*0.03,vy:(Math.random()-0.5)*0.03});
+    for(let i=0;i<NEBULA_COUNT;i++) nebulas.push({x:Math.random()*space.width,y:Math.random()*space.height,radius:Math.random()*280+220,phase:Math.random()*Math.PI*2});
+    function drawSpace(t){
+      sctx.clearRect(0,0,space.width,space.height);
+      sctx.fillStyle = "#000"; sctx.fillRect(0,0,space.width,space.height);
+      sctx.globalCompositeOperation = 'lighter';
+      nebulas.forEach(n=>{
+        n.phase += 0.0006;
+        const pulse = 1 + Math.sin(t*0.0002 + n.phase)*0.05;
+        const r = n.radius * pulse;
+        const g = sctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, r);
+        g.addColorStop(0, "rgba(255,255,255,0.025)");
+        g.addColorStop(1, "rgba(255,255,255,0)");
+        sctx.fillStyle = g;
+        sctx.beginPath(); sctx.arc(n.x, n.y, r, 0, Math.PI*2); sctx.fill();
+        n.x += 0.008; if(n.x > space.width + r) n.x = -r;
+      });
+      sctx.globalCompositeOperation = 'source-over';
+      stars.forEach(s=>{
+        s.a += (Math.random()>0.5?1:-1)*s.tw;
+        s.a = clamp(s.a,0.12,0.65);
+        s.x+=s.driftX; s.y+=s.driftY;
+        if(s.x<0)s.x=space.width;if(s.x>space.width)s.x=0;
+        if(s.y<0)s.y=space.height;if(s.y>space.height)s.y=0;
+        sctx.beginPath();
+        sctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+        sctx.fillStyle = `rgba(255,255,255,${s.a})`;
+        sctx.fill();
+      });
+      dust.forEach(d=>{
+        sctx.beginPath();
+        sctx.arc(d.x,d.y,d.r,0,Math.PI*2);
+        sctx.fillStyle = `rgba(255,255,255,${d.a})`;
+        sctx.fill();
+        d.x+=d.vx; d.y+=d.vy;
+        if(d.x<0)d.x=space.width;if(d.x>space.width)d.x=0;
+        if(d.y<0)d.y=space.height;if(d.y>space.height)d.y=0;
+      });
+    }
+
+    // WAVES
+    const wave = document.getElementById('waveCanvas');
+    const wctx = wave.getContext('2d', { alpha:true });
+    function sizeWave(){ wave.width = innerWidth; wave.height = innerHeight; }
+    addEventListener('resize', sizeWave); sizeWave();
+    const EMITTERS=9,RINGS_PER=5,MAX_R=Math.hypot(wave.width,wave.height)*0.55,emitters=[];
+    function seedEmitters(){emitters.length=0;for(let i=0;i<EMITTERS;i++){emitters.push({x:Math.random()*wave.width,y:Math.random()*wave.height,rings:Array.from({length:RINGS_PER},(_,k)=>({r:Math.random()*MAX_R,speed:0.06+Math.random()*0.08,alpha:0.10+Math.random()*0.08}))})}}
+    seedEmitters();
+    addEventListener('resize',()=>{ seedEmitters(); });
+    function drawWaves(){
+      wctx.clearRect(0,0,wave.width,wave.height);
+      wctx.globalCompositeOperation='lighter';
+      emitters.forEach(e=>{
+        e.rings.forEach(ring=>{
+          const g=wctx.createRadialGradient(e.x,e.y,ring.r*0.82,e.x,e.y,ring.r);
+          g.addColorStop(0,`rgba(255,255,255,${ring.alpha})`);
+          g.addColorStop(1,'rgba(255,255,255,0)');
+          wctx.strokeStyle=g;
+          wctx.lineWidth=1.2;
+          wctx.beginPath();
+          wctx.arc(e.x,e.y,ring.r,0,Math.PI*2);
+          wctx.stroke();
+          ring.r+=ring.speed;
+          if(ring.r>MAX_R){ ring.r=40+Math.random()*120; }
+        });
+      });
+      wctx.globalCompositeOperation='source-over';
+    }
+
+    // HALO
+    const overlay = document.getElementById('overlayCanvas');
+    const octx = overlay.getContext('2d',{alpha:true});
+    function sizeOverlay(){ overlay.width=innerWidth; overlay.height=innerHeight;}
+    addEventListener('resize',sizeOverlay); sizeOverlay();
+    const mouse={x:innerWidth/2,y:innerHeight/2};
+    addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;});
+    function drawHalo(){
+      octx.clearRect(0,0,overlay.width,overlay.height);
+      const g=octx.createRadialGradient(mouse.x,mouse.y,0,mouse.x,mouse.y,140);
+      g.addColorStop(0,'rgba(255,255,255,0.09)');
+      g.addColorStop(1,'rgba(255,255,255,0)');
+      octx.fillStyle=g;
+      octx.beginPath(); octx.arc(mouse.x,mouse.y,140,0,Math.PI*2); octx.fill();
+    }
+
+    // AURORA
+    const aurora=document.getElementById('auroraCanvas');
+    const actx=aurora.getContext('2d',{alpha:true});
+    function sizeAurora(){aurora.width=innerWidth; aurora.height=innerHeight;}
+    addEventListener('resize',sizeAurora); sizeAurora();
+    let aT=0;
+    function drawAurora(){
+      actx.clearRect(0,0,aurora.width,aurora.height);
+      aT+=0.4;
+      const cx=aurora.width*0.5+Math.sin(aT*0.002)*aurora.width*0.05;
+      const cy=aurora.height*0.55+Math.cos(aT*0.002)*aurora.height*0.04;
+      const inner=120+Math.sin(aT*0.003)*20;
+      const outer=Math.max(aurora.width,aurora.height)*0.85;
+      const g=actx.createRadialGradient(cx,cy,inner,cx,cy,outer);
+      g.addColorStop(0,'rgba(255,255,255,0.035)');
+      g.addColorStop(0.5,'rgba(255,255,255,0.025)');
+      g.addColorStop(1,'rgba(255,255,255,0)');
+      actx.globalCompositeOperation='lighter';
+      actx.fillStyle=g;
+      actx.fillRect(0,0,aurora.width,aurora.height);
+      actx.globalCompositeOperation='source-over';
+    }
+
+    function loop(t){
+      drawSpace(t);
+      drawWaves();
+      drawHalo();
+      drawAurora();
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+
+    addEventListener('resize',()=>{
+      const newMax=Math.hypot(wave.width,wave.height)*0.55;
+      emitters.forEach(e=> e.rings.forEach(r=> r.r=Math.min(r.r,newMax)));
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
